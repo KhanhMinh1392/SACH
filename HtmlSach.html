@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Quan Ly Sach</title>
+    <link rel="stylesheet" type="text/css" href="Content/css/bootstrap.css"/>
+</head>
+<body>
+    <div>
+        <h2>Danh Sách</h2>
+        <ul class="" id="Sachs" style="list-style-type: none;" />
+    </div>
+    <div>
+        <h2>Tìm kiếm bằng mã sách</h2>
+        <input class="form-control" type="text" id="prodId" size="5" style="width:500px; float:left;" placeholder="Tìm Kiếm" />
+        <input class="btn btn-primary" type="button" value="Search" onclick="find();" style="margin-left: 10px;" />
+        <p id="Sach" />
+    </div>
+    <div>
+        <h2>Thêm Sách</h2>
+        <form>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Tên Sách</label>
+                <input type="text" class="form-control" id="" aria-describedby="emailHelp" placeholder="Nhập Tên Sách" style="width: 500px">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Tác Giả</label>
+                <input type="text" class="form-control" id="" placeholder="Tên Tác Giả" style="width: 500px">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Content</label>
+                <input type="text" class="form-control" id="" placeholder="Tên Mô Tả" style="width: 500px">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Giá</label>
+                <input type="text" class="form-control" id="" placeholder="Giá Sách" style="width: 500px">
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Submit</button>
+        </form>
+    </div>
+    <script src="/Content/js/jquery-2.0.3.min.js"></script>
+    <script>
+        var uri = 'api/Sach';
+        $(document).ready(function () {
+            $.getJSON(uri)
+                .done(function (data) {
+                    $.each(data, function (key, item) {
+                        $('<li>', { text: formatItem(item) }).appendTo($('#Sachs'));
+                    });
+                });
+        });
+        function formatItem(item) {
+            return item.Title + ': $' + item.Price;
+        }
+        function find() {
+            var id = $('#prodId').val();
+            $.getJSON(uri + '/' + id)
+                .done(function (data) {
+                    $('#Sach').text(formatItem(data));
+                })
+                .fail(function (jqXHR, textStatus, err) {
+                    $('#Sach').text('Error: ' + err);
+                });
+        }
+        function insert() {
+            $.ajax({
+                method: "Put",
+                url: "api/Sach",
+                data: { name: "John", location: "Boston" }
+            })
+                .done(function (msg) {
+                    alert("Data Saved: " + msg);
+                });
+        }
+    </script>
+    <script type="text/javascript" src="/Content/js/bootstrap.js"></script>
+</body>
+</html>
