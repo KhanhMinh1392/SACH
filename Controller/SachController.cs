@@ -18,18 +18,19 @@ namespace SACH.Controller
             return db.SACHes.ToList();
         }
         [HttpGet]
-        public SACH GetFood(int id)
+        public SACH GetSach(int id)
         {
             DBSachDataContext db = new DBSachDataContext();
             return db.SACHes.FirstOrDefault(x => x.id == id);
         }
         [HttpPost]
-        public bool InsertNewFood(string name, string type, int price)
+        public bool InsertNewBook(string name, string type, int price, string title)
         {
             try
             {
                 DBSachDataContext db = new DBSachDataContext();
                 SACH sach = new SACH();
+                sach.Title = title;
                 sach.AuthorName = name;
                 sach.Content = type;
                 sach.Price = price;
@@ -43,18 +44,18 @@ namespace SACH.Controller
             }
         }
         [HttpPut]
-        public bool UpdateFood(int id, string name, string type, int price)
+        public bool UpdateBook(int id, string name, string type, int price, string title)
         {
             try
             {
                 DBSachDataContext db = new DBSachDataContext();
-                //lấy food tồn tại ra
                 SACH sach = db.SACHes.FirstOrDefault(x => x.id == id);
-                if (sach == null) return false;//không tồn tại false
+                if (sach == null) return false;
+                sach.Title = title;
                 sach.AuthorName = name;
                 sach.Content = type;
                 sach.Price = price;
-                db.SubmitChanges();//xác nhận chỉnh sửa
+                db.SubmitChanges();
                 return true;
             }
             catch
@@ -63,10 +64,9 @@ namespace SACH.Controller
             }
         }
         [HttpDelete]
-        public bool DeleteFood(int id)
+        public bool DeleteBook(int id)
         {
             DBSachDataContext db = new DBSachDataContext();
-            //lấy food tồn tại ra
             SACH sach = db.SACHes.FirstOrDefault(x => x.id == id);
             if (sach == null) return false;
             db.SACHes.DeleteOnSubmit(sach);
